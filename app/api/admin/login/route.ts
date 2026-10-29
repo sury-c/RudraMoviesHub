@@ -1,7 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import { timingSafeEqual } from 'crypto';
-import { makeSession, cookieName } from '@/lib/auth';
+import { makeSession, cookieName } from '../../../../lib/auth';
 
 export const runtime = 'nodejs';
 
