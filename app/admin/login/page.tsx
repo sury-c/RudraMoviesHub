@@ -1,90 +1,102 @@
 
-'use client';
+import { redirect } from 'next/navigation';
+import { isAdmin } from '../../lib/auth';
 
-import { useState } from 'react';
+export const dynamic = 'force-dynamic';
 
-export default function AdminLoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || 'Login failed. Please try again.');
-        return;
-      }
-
-      window.location.href = '/admin';
-    } catch {
-      setError('Server error. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+export default function AdminDashboard() {
+  // Verify admin session on the server
+  if (!isAdmin()) {
+    redirect('/admin/login');
   }
 
   return (
-    <main className="min-h-screen bg-[#080b0a] text-white flex items-center justify-center p-5">
-      <form
-        onSubmit={handleLogin}
-        className="w-full max-w-md rounded-2xl border border-lime-400/30 bg-[#111613] p-7 shadow-2xl"
-      >
-        <p className="mb-2 text-sm font-bold tracking-[0.3em] text-lime-400">
-          RUDRA MOVIES
-        </p>
+    <main className="min-h-screen bg-[#080b0a] p-5 text-white sm:p-8">
+      <div className="mx-auto max-w-6xl">
 
-        <h1 className="mb-2 text-3xl font-bold">Admin Login</h1>
+        {/* Header */}
+        <header className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-800 pb-6">
+          <div>
+            <p className="text-sm font-bold tracking-[0.3em] text-lime-400">
+              RUDRA MOVIES
+            </p>
 
-        <p className="mb-7 text-sm text-gray-400">
-          Sign in to manage your movie catalog.
-        </p>
+            <h1 className="mt-3 text-3xl font-bold">
+              Admin Dashboard
+            </h1>
 
-        <label className="mb-2 block text-sm">Username</label>
-        <input
-          className="mb-5 w-full rounded-lg border border-gray-700 bg-black p-3 text-white outline-none focus:border-lime-400"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          autoComplete="username"
-          required
-        />
+            <p className="mt-2 text-sm text-gray-400">
+              Manage your movie catalog.
+            </p>
+          </div>
 
-        <label className="mb-2 block text-sm">Password</label>
-        <input
-          className="mb-5 w-full rounded-lg border border-gray-700 bg-black p-3 text-white outline-none focus:border-lime-400"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
-          required
-        />
+          <span className="rounded-full border border-lime-400/30 bg-lime-400/10 px-4 py-2 text-sm text-lime-400">
+            Admin Access
+          </span>
+        </header>
 
-        {error && (
-          <p role="alert" className="mb-4 text-sm text-red-400">
-            {error}
+        {/* Welcome */}
+        <section className="mt-8 rounded-2xl border border-lime-400/30 bg-[#111613] p-6">
+          <h2 className="text-2xl font-bold">
+            Welcome to RUDRA MOVIES
+          </h2>
+
+          <p className="mt-3 text-gray-400">
+            Your admin login is working successfully.
+            This is your movie management dashboard.
           </p>
-        )}
+        </section>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-lg bg-lime-400 p-3 font-bold text-black disabled:opacity-50"
-        >
-          {loading ? 'Signing in...' : 'Sign In'}
-        </button>
-      </form>
+        {/* Dashboard Cards */}
+        <section className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+          <div className="rounded-xl border border-gray-800 bg-[#111613] p-6">
+            <div className="text-3xl">🎬</div>
+            <h3 className="mt-4 text-xl font-bold">
+              Movies
+            </h3>
+            <p className="mt-2 text-sm text-gray-400">
+              Movie catalog management.
+            </p>
+            <p className="mt-4 text-sm text-lime-400">
+              Coming soon
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-gray-800 bg-[#111613] p-6">
+            <div className="text-3xl">➕</div>
+            <h3 className="mt-4 text-xl font-bold">
+              Add Movie
+            </h3>
+            <p className="mt-2 text-sm text-gray-400">
+              Add new movies to your catalog.
+            </p>
+            <p className="mt-4 text-sm text-lime-400">
+              Coming soon
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-gray-800 bg-[#111613] p-6">
+            <div className="text-3xl">⚙️</div>
+            <h3 className="mt-4 text-xl font-bold">
+              Settings
+            </h3>
+            <p className="mt-2 text-sm text-gray-400">
+              Admin dashboard settings.
+            </p>
+            <p className="mt-4 text-sm text-lime-400">
+              Coming soon
+            </p>
+          </div>
+
+        </section>
+
+        {/* Footer */}
+        <footer className="mt-12 border-t border-gray-800 pt-6 text-center text-sm text-gray-500">
+          © {new Date().getFullYear()} RUDRA MOVIES. All rights reserved.
+        </footer>
+
+      </div>
     </main>
   );
 }
