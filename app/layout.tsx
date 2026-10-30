@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "RUDRA MOVIES — Stories hit different",
-  description: "Discover films worth your time. Regional favourites, cult classics and stories that stay with you.",
+  title: 'RUDRA MOVIES — Stories worth staying for',
+  description: 'Discover a considered collection of cinema, regional favourites and stories worth your time.',
+  applicationName: 'RUDRA MOVIES',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
